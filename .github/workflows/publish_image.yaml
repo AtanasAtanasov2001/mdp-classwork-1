@@ -33,6 +33,12 @@ jobs:
         run: trivy ${{ secrets.DOCKERHUB_USERNAME }}/task1_atanas:latest
         working-directory: .
 
+      - name: Install SonarScanner
+        run: |
+          curl -o sonarscanner.zip -L https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-4.6.2.2472-linux.zip
+          unzip sonarscanner.zip
+          export PATH=$PWD/sonar-scanner-4.6.2.2472-linux/bin:$PATH
+        working-directory: .
         
       - name: SonarCloud Scan
         run: sonar-scanner
