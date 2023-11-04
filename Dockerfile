@@ -2,7 +2,7 @@ FROM ubuntu:latest
 
 WORKDIR /src
 
-COPY app/requirements.txt .
+COPY src/requirements.txt .
 
 RUN apt-get update \
     && apt-get install -y python3-pip
