@@ -23,6 +23,32 @@ jobs:
         run: docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/task1_atanas:latest .
         working-directory: .
 
+      - name: Install Trivy
+        run: |
+          wget https://github.com/aquasecurity/trivy/releases/download/v0.18.3/trivy_0.18.3_Linux-64bit.deb
+          sudo dpkg -i trivy_0.18.3_Linux-64bit.deb
+        working-directory: .
+
+      - name: Trivy Scan
+        run: trivy ${{ secrets.DOCKERHUB_USERNAME }}/task1_atanas:latest
+        working-directory: .
+
+        
+      - name: SonarCloud Scan
+        run: sonar-scanner
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        working-directory: .
+
+      - name: Install Snyk
+        run: npm install -g snyk
+
+      - name: Snyk Scan
+        run: snyk test --all-projects
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+        working-directory: .
+
       - name: Push Docker Image to Docker Hub
         run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/task1_atanas:latest
 
